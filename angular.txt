@@ -1,0 +1,361 @@
+Course Strcuture : 1. The basic 2. Components and databinds 3.  directives 4. services and dependency injections 4.  Routing 5.  Observables 6. Forms 7. Pipes 8.  HTTP 
+
+===> Basic of Angualr ?
+1.Angular is typecript based framework 2.its an Single Page Application 3. SPA mean, just content updated/loaded, other content still same 4. user will be not aware of backend data  API
+
+=> Angular JS vs Angular 2/4/5/6/7/8/9/10/11/12/13
+1. Angular JS  : frmaework released on 2010
+2.This framework worked on MVC(Model View Controller)
+
+3. Angular 2/4... complete rewrite of angularJS
+4. its based on typscript, released on 2016, develop by google
+
+=> Prerequisites 
+1. HTML, CSS, Javascript 
+2. Document Object Model (DOM)
+3. Javascript function, events and error handling
+4. Basics Typescript becuase you are going to write in angualr.
+
+=>Angular Setup 
+1. download node js from https://nodejs.org/en/
+2. npm install -g @angular/cli
+
+=> Typescript 
+1. superset of javascript 
+2. undefined variable or functino etc. will be given an error on ide before run code
+3. Data Types : 1. Any : support of any data type  2. Built in types : string, number, boolean, void, null undefined 3. user-defined types : inlcudes array, enums, classes, interface etc.
+
+=> setting up bootstrap 
+1. npm install --save bootstrap 
+2. angular.json under styles: "./node_modules/bootstrap/dist/css/bootstrap.min.css
+3.angular.json under script: "./node_modules/bootstrap/dist/js/bootstrap.min.js
+
+
+===> Components
+1. Each Have html, css, ts and one option spec.ts file(which is used for unit test, We will learn this file later)
+=> Mannual Create Component (have three file)
+1. componentFileName.component.html: we will be write html content on  this file
+2. componentFileName.component.css : we will be write css in this file
+3. componentFileName.component.ts : we will be write here all typescript or javascript related file 
+	3.1 first we have to import our component : import { Component } from '@angular/core';
+	3.2 @ -> decorator :  @Component have three metadata I.selector : file name for use component in other component II. templateUrl : html file name III. styleUrl: you set here multiple css file  in object [{'filename'},{'filename'}]
+=> Command line generate component
+1. We can generate above said three/fourfile with using command : ng generate component componentName or ng g c componentName
+
+===> Databinding 
+1. we can communication from ts to html for pass data by vica versa
+2. Output : pass data from typescript to html
+1. String Interpolation: we can pass data using interpolation inside of double crucly brace like that {{data}} in html file and ts file will declare your value of data under app component class data:string = "Hello Angular"
+2. Property binding : {TagPropertyAttributeName] = "varibleName", now ts file : varibleName:dataType = "Value"; 
+3. Event Binding : Eventbindinglike: thats an javascript functionlike onclick, onmouseover, oninput etc.)
+	3.1 Example : for input tag  (input) = "functionName($event)"
+	3.2. Example 2 : (click)="functionName(Parameter)// you define own logic at ts [file
+4. Two Way Binding: i. FormModule is responsible to enable two way databinding (ii). its combination of property binding and event binding  (iii) Syntax : [(ngModle)]
+	4.1 Exmaple : html file : <h3> {{DisplayData}}</h3> <input type="text" placeholder="enter any value" (input)="updateString($event)" [(ngModel)]="DisplayData"> | ts file : DisplayData:any = ""; updateString(event:any){console.warn(`Event Fetch ${event}`);this.DisplayData = event.target.value;}
+
+===> Directives 
+1. You can define custom directive : use decorator for define any class directive @Directive({})
+1.1 Directives are used to inform DOM about the structure
+1.2 directive are building block to build an angular app
+2. Two Type directive 
+	2.1 Built-in directive
+	2.2 user-defined directive
+3. Structual directive : The Directive that change the structural of html elements
+	3.1 use always '*' before use any structural directives
+	3.2 Built in structural Directives are 
+		3.2.1 NgIf : use for hide and show elements
+			3.2.1.1 Exmaple :  html file : <h3 *ngIf="HideProduct else noProduct"> Your Product : {{DisplayData}}</h3> <ng-template #noProduct> <span>Hello No Product found</span></ng-template> ts file :  HideProduct:boolean = false; updateString(event:any){ this.HideProduct = true; console.warn(`Event Fetch ${event}`);this.DisplayData = event.target.value;}
+		3.2.2 NgFor  : we can access array output like this  <h1 *NgFor = 'let newVariable as ArrayName'> {{newVariable}} </h1>
+		3.2.3 NgSwitch  : use for multiple condtion 
+			3.2.3.1 Example : // ts file color="blue" (this is part of ts.component variable)
+			// html file  :
+			<h1 [ngSwitch]="color">
+			  <h2 *ngSwitchCase="'red'">I am Red</h2>
+			  <h2 *ngSwitchCase="'green'">I am green</h2>
+			  <h2 *ngSwitchCase="'blue'">I am blue</h2>
+			  <h2 *ngSwitchDefault>I am Default Switch Case </h2>
+		 	</h1>
+
+4. Attribute directive : 
+	1. Does not effect DOM Behaviour, this is effecting  on class attribute etc.
+	2. changing the behaviour of elemnent (Element : An HTML element is defined by a start html tag, some content, and an html end tag, Example : <h1> Hello WOrld </h1>, this whole process is element)
+	3. You can do Add text, style change etc.
+	4. this directives attribute we can add to any html element.
+	5. Built-in attribute directive  are a:
+		5.1 Ng Style: You can add style in html element based on true or false or an function  syntax : [NgStyle] ="{cssPropertyName:valuebyFunctionName()}"
+			5.1.1 Example : //htmlfile <h2 [ngStyle]="{background:getColor()}"> {{DisplayData}}, Whatsup ?</h2> {{getColor()}} tsfile//  DisplayData:string = "Product Added";constructor() { this.DisplayData = Math.random()>0.5?"Product Added":"Product not yet added";}getColor(){ return  this.DisplayData === 'Product Added'?'green':'red';} 
+		5.2 NgModel : in Databinding para no. 4.1 have already define how can u use NgModel.
+		5.3 NgClass  : this is useful for add class and use as your based function or interpolation name syntax : [NgClass] = {{className:interpolation or boolean or function or condition display or not}}
+			5.3.1 : Example :  html file <h2 [ngStyle]="{background:getColor()}" [ngClass]="{fontColor:DisplayData==='Product Added'}"> {{DisplayData}}, Whatsup ?</h2> ts file : DisplayData:string = "Product Added";constructor() { this.DisplayData = Math.random()>0.5?"Product Added":"Product not yet added";}
+																							      getColor(){ return  this.DisplayData === 'Product Added'?'green':'red';}
+																							// css : .fontColor {color:white;}
+5. Custom Directive cli : ng g directive directiveName , after generate directive auto include app.moudle.ts file import { TestingDirective } from './testing.directive' under declaration 
+	5.1 custome directive can be decorator with @Director()
+	5.2 We can use directive at anywhere in component but (we have to inject in directive file constructor(private elemmentRef:ElementRef){})with metadata selector name : '[directiveName]';
+	5.3.We can use this directory many times in single or multicomponent
+	5.4 Custom directive have only ngOnInit lifecycle
+	5.5 In para 5.3 Instead of access element using ElementRef & injecing elementRef, you can use renderer.
+	5.6 renderer is best instead of use element ref(search google for more information)
+		
+Example 1. 
+import { Directive, functionParameterName} from '@angular/core';
+@Directive({
+  selector: '[appRedElement]'
+})
+export class RedElementDirective {
+
+  constructor(el:functionParameterName) {
+    el.nativeElement.style.color = "red";
+    el.nativeElement.style.backgroundColor = "blue";
+    el.nativeElement.innerHTML = "Hello Angular";
+   }
+
+}
+=> you can use some javascript function like that el.nativeElement.innerHTML = "hello";
+<!-- HTML FILE -->
+<h1 appRedElement> </h1>
+
+Example 2.1 using ElementRef
+import { Directive, ElementRef, OnInit } from '@angular/core';
+
+@Directive({
+  selector: '[appTesting]'
+})
+export class TestingDirective  implements OnInit{
+  constructor(private el:ElementRef){}   
+  ngOnInit(): void {
+    this.el.nativeElement.style.background  = "blue";   
+  }
+}
+or
+2.2 using Renderer2
+import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appTesting]'
+})
+export class TestingDirective  implements OnInit{
+  @Input()appTesting:string = "";
+  constructor(private el:ElementRef, private ren:Renderer2){}   
+  ngOnInit(): void {
+    this.ren.setStyle(this.el.nativeElement, 'background-color', 'blue')
+  }
+}
+<h1 appTesting> Hello Angular </h1> // background color is now blue
+
+Example 3.1 // get value from html  using input decorator with ElementRef
+import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+
+@Directive({
+  selector: '[appTesting]'
+})
+export class TestingDirective  implements OnInit{
+  @Input()appTesting:string = "";
+  constructor(private el:ElementRef){}   
+  ngOnInit(): void {
+    this.el.nativeElement.style.background  = this.appTesting;
+  }
+}
+3.2 using Renderer2
+import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appTesting]'
+})
+export class TestingDirective  implements OnInit{
+  @Input()appTesting:string = "";
+  constructor(private el:ElementRef, private ren:Renderer2){}   
+  ngOnInit(): void {
+    this.ren.setStyle(this.el.nativeElement, 'background-color', this.appTesting)
+  }
+}
+html file : <h1 [appTesting]="'grey'"> Hello Angular </h1>
+<h1 [appTesting]="'grey'" style="color:white"> Hello Angular </h1>
+
+	5.7 Host Listners & Host Binding
+		5.7.1 To make directives intertactive, Now need to listen/call the events thats are happen somthing dynamic like javascript events
+		5.7.2 @HostListener() like an javascript event
+Example 1
+import { Directive, ElementRef, Host, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appTesting]'
+})
+export class TestingDirective  implements OnInit{
+  @Input()appTesting:string = "";
+  constructor(private el:ElementRef, private ren:Renderer2){}   
+  ngOnInit(): void {
+    // this.ren.setStyle(this.el.nativeElement, 'background-color', this.appTesting)
+  }
+  @HostListener('mouseover') //@HostListener('mouseleave')
+  mouseEnter(){
+    // alert("mouse enter");
+    this.ren.setStyle(this.el.nativeElement, 'background-color', this.appTesting)
+  }
+}
+
+<h1 [appTesting] ="'blue'"> I love Angular </h1> html file //
+
+		5.7.3 @HostBinding() :  @HostBinding('style.color')color:string = "";
+Example : 
+import { Directive, ElementRef, Host, HostBinding, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appTesting]'
+})
+export class TestingDirective  implements OnInit{
+  @Input()appTesting:string = "";
+  @HostBinding('style.color')color:string = "";
+  constructor(private el:ElementRef, private ren:Renderer2){}   
+  
+  ngOnInit(): void {
+    this.color = this.appTesting;
+or 
+//    this.color = 'blue'; 
+    }
+}
+<h1 [appTesting] ="'green'"> I love Angular </h1> // 
+or 
+<h1 appTesting> I love Angular </h1> // in this caste you do not required @Input in directives.
+	
+	5.8 Custom Property Binding : In previous para 5.7 we only define one custom property binding, but in this case we can also define multiple custom binding property just using input 	lets see an example 
+Example 1. 
+import { Directive, ElementRef, Host, HostBinding, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appTesting]'
+})
+export class TestingDirective  implements OnInit{
+  @Input()appTesting:string = "";
+  @Input()bgColor:string = "";
+  @HostBinding('style.color')color:string = "";
+  @HostBinding('style.backgroundColor')bgcolor:string = "";
+  constructor(private el:ElementRef, private ren:Renderer2){}   
+  
+  ngOnInit(): void {
+    this.color = this.appTesting;
+    this.bgcolor = this.bgColor;
+    }
+}
+
+html file: <h1 [appTesting] ="'white'" [bgColor]="'red'"> I love Angular </h1>
+
+Example 3 
+import { Directive, ElementRef, Host, HostBinding, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appTesting]'
+})
+export class TestingDirective  implements OnInit{
+  @Input()color:string = "";
+  @Input()bgColor:string = "";
+
+  @HostListener('mouseover')
+  mouseExits(){
+    this.ren.setStyle(this.el.nativeElement, 'background-color', this.bgColor)
+    this.ren.setStyle(this.el.nativeElement, 'color', this.color)
+  }
+
+  constructor(private el:ElementRef, private ren:Renderer2){}   
+  
+  ngOnInit(): void {}
+}
+<h1 appTesting [color] ="'white'" [bgColor]="'red'"> I love Angular </h1> //  first we are define directive name thereafter i have access the property of @input
+	
+	5.9 Custom Structural Directive:lets make an directive like *ngIf
+		5.9.1 add @Input to get the condition as property
+		5.9.2 You need to access the template as here the DOM get modified in constructor 1. temName:TemplateRef<dataType>  viewName:ViewContinerRef
+Example 
+import { Directive,  Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+
+@Directive({
+  selector: '[appUnless]'
+})
+export class TestingDirective  implements OnInit{
+  constructor(public tempRef:TemplateRef<any>, private viewRef:ViewContainerRef ){}     
+  @Input() set
+  appUnless(condition:boolean){
+    if(!condition){
+      this.viewRef.createEmbeddedView(this.tempRef);
+    }else{
+      this.viewRef.clear();
+    }
+  }
+  ngOnInit(): void {}
+}
+
+
+<div *appUnless="true"><span> Condition is fullfiled </span></div> // in true content will hide and in false content will be show
+===> Communication between component and component
+=>Splitting Components : Instead of dumping everything in one single component, Its alwayas better to split your component, (i) you can bind custom properites and emit events (ii) similarly you can use property binding and event binding in custom directives
+
+1. Input Data : pass data to component from parent component we causly use property binding (parent to child component)
+	1.1. Define the variable with @Input() decorator to make it accessbile from outside of the component
+	1.2. You alias the name of input element in parent component : syntax : @Input('ElementAliasName');
+Example : Parent Componet ts file under class component--> Demotext:string = "Hello I am from Parent Componet"; & html file ; <app-demo [parentData] = "Demotext" ></app-demo> or <app-demo parentData = {{Demotext}} ></app-demo>
+Child Componet ts file under class --> @Input() parentData:string = ""; // data here blank , but data come from parent, Now html file {{parentData}}
+
+2. Output Data : pass data from the component to parent component we simply use event binding(child to parent)	
+	2.1. define variable EventEmitter to emit some data from the component Syntax : @Output()emitter = new EventEmitter();
+	2.2. You cam use event bidning to catch this event in parent component using () barckes
+	2.3. You alias the name of input element in parent component : syntax : @Output('ElementAliasName') emitter = new EventEmitter<>();
+	2.4  import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+Example: chlidComponet ts file under class -> @Output() childEmt  = new EventEmitter(); passToParent(){this.childEmt.emit("I am  from child component");} html file -> <button (click)="passToParent()"> Pass</button>
+parentComponent ts file under class -> childData:string = ""; html file -> <app-demo (childEmt)="childData=$event"></app-demo>
+
+helpful for inlcude all component styles,html elements, ts code to parent component(whereas inlcude component)
+=> View Encapsulation
+1. encapsulation:ViewEncapsulation.None  // add this under decorator component  (@component) // ts file
+2. Example : first component html file -> <h1> Hello First Component </h1>, second component html file -> <h1> Hello Second Component </h1>, if you write on first component ts file : encapsulation:ViewEncapsulation.None under component decorator.
+	Thereafter  if you are not define in h1 tag style color and in second componet,  so, first component will be auto catch styles from first componet h1 tag styles tag
+
+=> Accessing Element : We can access any element by using this method 
+
+firstMethod : 
+1.  we knew that access the element value by using like this <input type="text" name="" id=""  value="sajid" #firstname> {{firstname.value}}
+2. if you want  to get element property or value in ts file, So you can use @ViewChild('aliasName') firstname:ElementRef(); click(){alert(this.firstname.nativeElement.value) } // get the result
+3. import { Component, ElementRef, ViewChild } from '@angular/core';
+
+secondMethod: for access element by using <ng-content> </ng-content>
+1. You can access the element ref like above said first method  in ts file : @ContentChild('refName')refName:ElementRef; this.refname.nativeElement.value;
+2. How to Place ng content 
+Example : 1. userForm component html file : <ng-content></ng-content> ts file / @ContentChild('refName')refName:ElementRef; this.refname.nativeElement.value;
+	  2. parent Component html file : <app-userForm> <h1> I am from demoCOmponent through ng content</h1><input type="text" #name></app-userForm>
+
+=> Lifecycle
+1. ngOnChange - after a bound input property changes and this is the first method thatg gets called in the lifecycle of component
+2. ngOninit - when component gets initialize/render/genereated on browser and called after constructure gets executed
+3. ngDoChecks - runs very often whenever any change is detected and will be called after every single click or on any times gets executed
+4. ngAfterContentinit - after the ng-content gets added in view
+5. NgAfterContentChecked - calls everytime the added content gets checked
+6. NgAfterViewinit - whenever the HTML template gets rendered
+7. NgAfterViewChecked - when the initialized view get checked
+8. NgOnDestroy - the last method to be called before the component gets destoryed, you can unsubscribe or removed element for show short message.
+
+
+===> Services
+1. this is an typescript class with narrow well defined purpose used for method function, type anywhere in component.
+2. services data, function method etc. can not share with parent and child relationship
+3. You can create service by mannual, service-file-name.service.ts
+4. Create method function in service and used anywhere in component excpet parent-child relationship
+5. app.module.ts file you provides your service and this is much better for use anywhere  with parent-child relationship
+6. import you serivice to ts file  under class component two way : 1. const ObjectName = new ClassServiceName(); ObjectNamej.methodName(); 2. constructure(private serviceName:ClassServiceName){} and you use anywhere in derived(current or inside class)  class
+=> Dependency Injector :its something that our call the any class function instantly with using constructor(private newName: Serivde)
+	1. To create instance of serivce we need to provide this service in @Component({providers:[ServiceClassName]})
+=> HIerarchical Injector : Injectors work in hierachy in angular application(Hierachy : thats inject in different place angular
+1.App Module : If you provide serivce in app module, you can access from anywhere component
+2.App Component : 
+3.Any Component : if you provide service in any app component you can use service in any component excpet parent-child
+Note : not clear
+4. if you want to use on first serivce inside of second service, So you have to @Injectable() on the top of your secondService and impot(Injectable) fromm '@angular/core'
+	4.1 Injectable(): like an class we can use all first service method function whereas declared decorator injectable (in case example secondService)
+Note : good practice to @injectable() in all service irrespective
+
+
+===> Routing (not code)
+1. Without reload page, changing the content of your web page called routing
+2. You define our routers at routing.moudle.ts file Syntax : const routes: Routes = [{path:'routeName', component:DemoComponent  }, {path:'routeName2', component:DemoComponent2  }]; and import routing at app.module.ts.
+3. AppRoutingModule in import section and app.module.ts file: import { AppComponent } from './app.component';
+4. <router-outlet> </router-outlet> : where you want to show your componet.
+
+
